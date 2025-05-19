@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soles Society - Where every step tells a story</title>
+    <style>
+        /* Same styles as before */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .nav {
+            background-color: #444;
+            padding: 15px 0;
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .featured-shoes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .shoe-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .shoe-card img {
+            width: 200px;
+            height: 200px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .shoe-card h3 {
+            margin: 15px 0;
+            color: #333;
+        }
+
+        .price {
+            font-size: 1.2em;
+            color: #e44d26;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e44d26;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #d13b1a;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e44d26;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: white;
+            color: #e44d26;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .category {
+            display: none;
+        }
+
+        .category.active {
+            display: grid;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Soles Society</h1>
+            <p>Where every step tells a story</p>
+        </div>
+    </header>
+
+    <div class="cart-icon" onclick="toggleCart()">
+        🛒
+        <span class="cart-count">0</span>
+    </div>
+
+    <div class="modal-backdrop" onclick="toggleCart()"></div>
+    <div class="cart-modal">
+        <h2>Shopping Cart</h2>
+        <div id="cart-items"></div>
+        <div id="cart-total">Total: ₱0.00</div>
+        <button class="btn" onclick="checkout()">Checkout</button>
+        <button class="btn" onclick="toggleCart()">Close</button>
+    </div>
+
+    <nav class="nav">
+        <div class="container">
+            <ul>
+                <li><a onclick="showCategory('all')">Home</a></li>
+                <li><a onclick="showCategory('men')">Men</a></li>
+                <li><a onclick="showCategory('women')">Women</a></li>
+                <li><a onclick="showCategory('kids')">Kids</a></li>
+                <li><a onclick="showCategory('sale')">Sale</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="featured-shoes category active" id="all">
+            <div class="shoe-card">
+                <img src="images/mens-running.jpg" alt="Running Shoe" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Ultra Boost Runner</h3>
+                <p>Perfect for your daily running routine</p>
+                <div class="price">₱1290.99</div>
+                <button class="btn" onclick="addToCart('Ultra Boost Runner', 1299.99)">Add to Cart</button>
+            </div>
+
+            <div class="shoe-card">
+                <img src="images/casual.jpg" alt="Casual Shoe" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Casual Comfort</h3>
+                <p>Everyday comfort meets style</p>
+                <div class="price">₱8900.99</div>
+                <button class="btn" onclick="addToCart('Casual Comfort', 8900.99)">Add to Cart</button>
+            </div>
+
+            <div class="shoe-card">
+                <img src="images/sport.jpg" alt="Sport Shoe" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Pro Sport Elite</h3>
+                <p>Professional grade athletic shoe</p>
+                <div class="price">₱11159.99</div>
+                <button class="btn" onclick="addToCart('Pro Sport Elite', 11159.99)">Add to Cart</button>
+            </div>
+        </section>
+
+        <section class="featured-shoes category" id="men">
+            <!-- Men's shoes -->
+            <div class="shoe-card">
+                <img src="images/mens-formal.jpg" alt="Formal Shoe" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Classic Oxford</h3>
+                <p>Elegant formal wear</p>
+                <div class="price">₱1149.99</div>
+                <button class="btn" onclick="addToCart('Classic Oxford', 1149.99)">Add to Cart</button>
+            </div>
+        </section>
+
+        <section class="featured-shoes category" id="women">
+            <!-- Women's shoes -->
+            <div class="shoe-card">
+                <img src="images/womens-heel.jpg" alt="High Heels" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Elegant Heels</h3>
+                <p>Stylish and comfortable heels</p>
+                <div class="price">₱1119.99</div>
+                <button class="btn" onclick="addToCart('Elegant Heels', 1119.99)">Add to Cart</button>
+            </div>
+        </section>
+
+        <section class="featured-shoes category" id="kids">
+            <!-- Kids' shoes -->
+            <div class="shoe-card">
+                <img src="images/kids-sneaker.jpg" alt="Kids Sneaker" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Kids Fun Runner</h3>
+                <p>Colorful and durable</p>
+                <div class="price">₱6119.99</div>
+                <button class="btn" onclick="addToCart('Kids Fun Runner', 6119.99)">Add to Cart</button>
+            </div>
+        </section>
+
+        <section class="featured-shoes category" id="sale">
+            <!-- Sale items -->
+            <div class="shoe-card">
+                <img src="images/sale-shoe.jpg" alt="Sale Shoe" onerror="this.src='https://via.placeholder.com/200x200'">
+                <h3>Summer Special</h3>
+                <p>Limited time offer</p>
+                <div class="price">₱4229.99</div>
+                <button class="btn" onclick="addToCart('Summer Special', 4229.99)">Add to Cart</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Awesome Shoes. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        let cartTotal = 0;
+
+        function showCategory(category) {
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            if (category === 'all') {
+                document.getElementById('all').classList.add('active');
+            } else {
+                document.getElementById(category).classList.add('active');
+            }
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            cartTotal += price;
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        function updateCartCount() {
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            cart.forEach((item, index) => {
+                cartItems.innerHTML += `
+                    <div>
+                        ${item.name} - ₱${item.price}
+                        <button onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+            });
+            document.getElementById('cart-total').textContent = `Total: ₱${cartTotal.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) {
+            cartTotal -= cart[index].price;
+            cart.splice(index, 1);
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        function toggleCart() {
+            const modal = document.querySelector('.cart-modal');
+            const backdrop = document.querySelector('.modal-backdrop');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            backdrop.style.display = backdrop.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            alert('Thank you for your purchase! Total: ₱' + cartTotal.toFixed(2));
+            cart = [];
+            cartTotal = 0;
+            updateCartCount();
+            updateCartDisplay();
+            toggleCart();
+        }
+    </script>
+</body>
+</html>
